@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Dök Fmüžik sno Sajem Tan</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="intro">
+      <select id="cycle">
+        <option value="0">Cycle 0</option>
+        <option value="1">Cycle 1</option>
+        <option value="2">Cycle 2</option>
+        <option value="3">Cycle 3</option>
+        <option value="4">Cycle 4</option>
+        <option value="5">Cycle 5</option>
+        <option value="6">Cycle 6</option>
+        <option value="7">Cycle 7</option>
+        <option value="8">Cycle 8</option>
+        <option value="9">Cycle 9</option>
+        <option value="10">Cycle 10</option>
+        <option value="11">Cycle 11</option>
+      </select>
+      <select id="letter">
+        <option value="0">Dûdem (d)</option>
+        <option value="1">Gigim (g)</option>
+        <option value="2">Xataxym (x)</option>
+        <option value="3">Jegen (j)</option>
+        <option value="4">Fijyc (f)</option>
+        <option value="5">Vöjam (v)</option>
+        <option value="6">Ţeţat (ţ)</option>
+        <option value="7">Sekët (s)</option>
+        <option value="8">Zûzûmët (z)</option>
+        <option value="9">Šûžik (š)</option>
+        <option value="10">Žirik (ž)</option>
+        <option value="11">Lik (l)</option>
+        <option value="12">Röfit (r)</option>
+        <option value="13">Mömëc (m)</option>
+        <option value="14">Nyran (n)</option>
+        <option value="15">Našam (a)</option>
+        <option value="16">Xëtën (ë)</option>
+        <option value="17">Tezet (e)</option>
+        <option value="18">Tömöm (ö)</option>
+        <option value="19">Mizirat (i)</option>
+        <option value="20">Lysyc (y)</option>
+        <option value="21">Šnûk (û)</option>
+        <option value="22">Tün (ü)</option>
+        <option value="23">Cûc (c)</option>
+        <option value="24">Tytyt (t)</option>
+        <option value="25">Kyfik (k)</option>
+        <option value="26">Rnanic (â)</option>
+        <option value="27">Ţnûdûk (ê)</option>
+        <option value="28">Snözem (o)</option>
+        <option value="29">Vmyn (u)</option>
+      </select>
+      <button id="go">View Lesson</button>
+      <p id="nonexistent">Sorry! That lesson hasn't been created yet. Go bug somebody to fix that. Probably Stone.</p>
+    </div>
+    <div id="day">
+      <button id="exit">Back to menu</button>
+      <button id="prev">Previous Lesson</button>
+      <button id="next">Next Lesson</button>
+      <h2>Vocabulary</h2>
+      <ul id="vocab"></ul>
+      <div id="comments"></div>
+      <h2>Practice Sentences</h2>
+      <div id="sentences"></div>
+      <div id="reading"></div>
+    </div>
+    <script type="text/javascript">
+const DAYS = [{"vocab": [{"word": "xan\u00f6n", "def": [{"lang": "en", "txt": " greet"}]}, {"word": "f\u00ea", "def": [{"lang": "en", "txt": " (a verb conjugation)"}]}, {"word": "d\u00ea", "def": [{"lang": "en", "txt": " I"}]}, {"word": "do", "def": [{"lang": "en", "txt": " you"}]}, {"word": "gamyk", "def": [{"lang": "en", "txt": " tree"}]}], "comments": [[{"lang": "en", "txt": "Sajem Tan verbs don't agree with their subjects, so for now the only conjugation you need is "}, {"lang": "st", "txt": "f\u00ea"}, {"lang": "en", "txt": ". What this means will become clearer soon, but for now just put it on all the verbs you learn."}], [{"lang": "en", "txt": "Nouns in Sajem Tan don't have articles, so "}, {"lang": "st", "txt": "gamyk"}, {"lang": "en", "txt": " can either \"a tree\" or \"the tree\", depending on context."}], [{"lang": "en", "txt": "In English, the subject is before the verb and the object is after, but Sajem Tan uses the opposite order, so "}, {"lang": "st", "txt": "D\u00ea xan\u00f6nf\u00ea do"}, {"lang": "en", "txt": " is \"You greet me\", not \"I greet you\"."}], [{"lang": "st", "txt": "Xan\u00f6nf\u00ea"}, {"lang": "en", "txt": " can be used by itself without a subject to mean \"hi!\""}]], "sentences": [{"st": "Do xan\u00f6nf\u00ea gamyk", "en": " The tree greets you"}, {"st": "Gamyk xan\u00f6nf\u00ea d\u00ea", "en": " I greet the tree"}]}, {"vocab": [{"word": "vi\u0163it", "def": [{"lang": "en", "txt": " bird"}]}], "comments": [[{"lang": "en", "txt": "blah"}]], "sentences": [{"st": "vi\u0163it", "en": " blah"}]}];
+function txtls2html(ls) {
+  return ls.map(function(blob) {
+    return '<span class="'+blob.lang+'">'+blob.txt+'</span>';
+  }).join('');
+}
+
+function sentence_button() {
+  $(this).toggle();
+  $(this).parent().find('p').toggle();
+}
+
+function display_day(idx) {
+  let blob = DAYS[idx];
+  $('#vocab').html(blob.vocab.map(function(voc) {
+    return '<li><span class="st headword">'+voc.word+'</span>&nbsp;'+txtls2html(voc.def)+'</li>';
+  }).join(''));
+  $('#comments').html(blob.comments.map(function(com) {
+    return '<p class="comment">'+txtls2html(com)+'</p>';
+  }).join(''));
+  let sents = blob.sentences.slice(0);
+  let st_ct = sents.length / 2;
+  let sent_html = '';
+  while (sents.length > 0) {
+    let sb = sents.splice(Math.floor(Math.random() * sents.length), 1)[0];
+    if (sents.length >= st_ct) {
+      sent_html += '<div class="sentence"><p class="st">'+sb.st+'</p><div class="answer"><button class="sentbut">Show English</button><p class="en">'+sb.en+'</p></div>';
+    } else {
+      sent_html += '<div class="sentence"><p class="en">'+sb.en+'</p><div class="answer"><button class="sentbut">Show Sajem Tan</button><p class="st">'+sb.st+'</p></div>';
+    }
+  }
+  $('#sentences').html(sent_html);
+  $('.sentbut').click(sentence_button);
+  $('.answer p').hide();
+  if (blob.hasOwnProperty('reading')) {
+    $('#reading').html('<h2>Reading</h2><p>'+blob.reading+'</p>');
+  } else {
+    $('#reading').html('');
+  }
+  if (idx == 0) {
+    $('#prev').hide();
+  } else {
+    $('#prev').show().click(function() { display_day(idx-1); });
+  }
+  if (idx+1 == DAYS.length) {
+    $('#next').hide();
+  } else {
+    $('#next').show().click(function() { display_day(idx+1); });
+  }
+  $('#intro').hide();
+  $('#day').show();
+}
+
+$(document).ready(function() {
+  $('#day').hide();
+  $('#exit').click(function() {
+    $('#day').hide();
+    $('#intro').show();
+  });
+  $('#nonexistent').hide();
+  $('#go').click(function() {
+    $('#nonexistent').hide();
+    let idx = parseInt($('#cycle').val()) * 30 + parseInt($('#letter').val());
+    if (idx < DAYS.length) {
+      display_day(idx);
+    } else {
+      $('#nonexistent').show();
+    }
+  });
+});
+
+    </script>
+  </body>
+</html>
