@@ -1,0 +1,22 @@
+-
+  vocab:
+    - $xanön$ greet
+    - $fê$ (a verb conjugation)
+    - $dê$ I
+    - $do$ you
+    - $gamyk$ tree
+  comments:
+    - Sajem Tan verbs don't agree with their subjects, so for now the only conjugation you need is $fê$. What this means will become clearer soon, but for now just put it on all the verbs you learn.
+    - Nouns in Sajem Tan don't have articles, so $gamyk$ can either "a tree" or "the tree", depending on context.
+    - In English, the subject is before the verb and the object is after, but Sajem Tan uses the opposite order, so $Dê xanönfê do$ is "You greet me", not "I greet you".
+    - $Xanönfê$ can be used by itself without a subject to mean "hi!"
+  sentences:
+    - $Do xanönfê gamyk$ The tree greets you
+    - $Gamyk xanönfê dê$ I greet the tree
+-
+  vocab:
+    - $viţit$ bird
+  comments:
+    - blah
+  sentences:
+    - $viţit$ blah
